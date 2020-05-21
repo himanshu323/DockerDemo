@@ -1,0 +1,65 @@
+version:  "3"
+services:
+  hub:
+    image:  selenium/hub:3.14
+    ports:
+      - 4444:4444
+  chrome:
+    image:  selenium/node-chrome:3.14
+    environment:
+      - HUB_HOST=hub
+    depends_on:
+      - hub
+  firefox:
+    image:  selenium/node-firefox:3.14
+    environment:
+      - HUB_HOST=hub
+    depends_on:
+      - hub
+  search-module1:
+    image: himanshu/selenium-docker
+    shm_size: "1gb"
+    environment:
+      - HUB_HOST=hub
+      - MODULE=search-module.xml
+      - BROWSER=firefox
+    depends_on:
+      - chrome
+      - firefox
+    volumes:
+      - /Users/himarora1/IdeaProjects/docker/search-results1:/usr/share/udemy/test-output
+  search-module2:
+    image: himanshu/selenium-docker
+    environment:
+      - HUB_HOST=hub
+      - MODULE=search-module.xml
+      - BROWSER=chrome
+    depends_on:
+      - chrome
+      - firefox
+    volumes:
+      - /Users/himarora1/IdeaProjects/docker/search-results2:/usr/share/udemy/test-output
+  book-flight-module1:
+    image: himanshu/selenium-docker
+    shm_size: "1gb"
+    environment:
+      - HUB_HOST=hub
+      - MODULE=book-flight-module.xml
+      - BROWSER=firefox
+    depends_on:
+      - chrome
+      - firefox
+    volumes:
+      - /Users/himarora1/IdeaProjects/docker/book-results1:/usr/share/udemy/test-output
+  book-flight-module2:
+    image: himanshu/selenium-docker
+    environment:
+      - HUB_HOST=hub
+      - MODULE=book-flight-module.xml
+      - BROWSER=chrome
+    depends_on:
+      - chrome
+      - firefox
+    volumes:
+      - /Users/himarora1/IdeaProjects/docker/book-results2:/usr/share/udemy/test-output
+  
